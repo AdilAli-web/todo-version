@@ -3,7 +3,7 @@ import Head from "./Component/Head"
 import Inputs from "./Component/Inputs"
 import ShowingValue from "./Component/ShowingValue"
 import './Main.css'
-import Func from "./Component/Func"
+
 
 function App() {
 
@@ -18,23 +18,26 @@ function App() {
   }
 
   ])
-  let [task, setTask] = useState({ name: "", date: "" })
-
-  function adding() {
-    if (task.name.trim() === "") return;
-    let oldarr = [...text, task]
-    setText(oldarr)
-    setTask("")
 
 
+  function adding(todoname, tododate) {
+    setText([...text, {
+      name: todoname, date: tododate
+    }])
+
+  }
+  function handleDelete(names) {
+    const Delete = text.filter((item) => item.name !== names)
+    setText(Delete)
   }
   return (
     <center>
       <Head />
-      <Inputs adding={adding} tasks={setTask} task={task} />
+      <Inputs adding={adding} />
+      {text.length === 0 && <p>Welcome to Todo App</p>}
 
-      <ShowingValue todoitems={text} />
-      <Func />
+      <ShowingValue handle={handleDelete} todoitems={text} />
+
     </center>
   )
 }
