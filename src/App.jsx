@@ -2,43 +2,51 @@ import { useState } from "react"
 import Head from "./Component/Head"
 import Inputs from "./Component/Inputs"
 import ShowingValue from "./Component/ShowingValue"
+import UserContext from "./StoreAllState.jsx"
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import './Main.css'
 
 
 function App() {
 
-  let [text, setText] = useState([{
-    name: "Adil ALi",
-    date: "13/07/2025"
-  },
-  {
-    name: "sharukh khan",
-    date: "11/07/2025",
+  let [text, setText] = useState([])
 
-  }
-
-  ])
 
 
   function adding(todoname, tododate) {
-    setText([...text, {
-      name: todoname, date: tododate
-    }])
+    setText([
+      ...text,
+      {
+        id: Date.now(),
+        name: todoname,
+        date: tododate
+      }
+    ]);
+
+    toast.success("Todo added!");
 
   }
-  function handleDelete(names) {
-    const Delete = text.filter((item) => item.name !== names)
-    setText(Delete)
+  function handleDelete(id) {
+    console.log('id', id);
+
+    const DeleteNewArr = text.filter((item) => item.id !== id)
+    setText(DeleteNewArr)
+    toast.error("Todo Deleted!");
   }
   return (
-    <center>
-      <Head />
-      <Inputs adding={adding} />
-      {text.length === 0 && <p>Welcome to Todo App</p>}
+    <UserContext.Provider value={{ text: text, addings: adding, handleDelete: handleDelete }}>
 
-      <ShowingValue handle={handleDelete} todoitems={text} />
+      <center>
+        <Head />
+        <Inputs />
+        {text.length === 0 && <p>Welcome to Todo App</p>}
 
-    </center>
+
+        <ShowingValue />
+        <ToastContainer />
+      </center>
+    </UserContext.Provider>
   )
 }
 

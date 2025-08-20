@@ -1,15 +1,19 @@
 import React from 'react'
 import TodoItem from './TodoItem'
-
-function ShowingValue({ todoitems, handle }) {
+import { useContext } from "react";
+import UserContext from "../StoreAllState.jsx";
+function ShowingValue() {
+  const ContextObj = useContext(UserContext);
+  const todoitems = ContextObj.text;
+  const handle = ContextObj.handleDelete;
   return (
     <>
       <div className='items-container'>
 
         {
-          todoitems.map((obj, index) => (
+          todoitems.map((obj) => (
 
-            <TodoItem key={index} todoname={obj.name} tododate={obj.date} handle={handle} />
+            <TodoItem key={obj.id} todoname={obj.name} tododate={obj.date} handle={() => handle(obj.id)} />
           ))}
 
       </div>
